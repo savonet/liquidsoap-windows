@@ -1,0 +1,15 @@
+FROM dockcross/windows-x86
+MAINTAINER Romain Beauxis <toots@rastageeks.org>
+
+RUN apt-get update && apt-get install -y --force-yes gawk aspcud git
+
+RUN useradd -g staff --create-home opam
+USER opam
+
+RUN curl -kL https://raw.github.com/hcarty/ocamlbrew/master/ocamlbrew-install | env CC=gcc OCAMLBREW_FLAGS="-r" bash
+
+ENV PATH=/home/opam/ocamlbrew/ocaml-4.05.0/bin:$PATH
+
+RUN opam init --auto --compiler=4.04.0+32bit
+
+RUN opam pin --no-action add topkg https://github.com/whitequark/topkg.git
